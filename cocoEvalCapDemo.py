@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import skimage.io as io
 import pylab
 pylab.rcParams['figure.figsize'] = (10.0, 8.0)
-
+import time
 import json
 from json import encoder
 encoder.FLOAT_REPR = lambda o: format(o, '.3f')
@@ -19,7 +19,7 @@ encoder.FLOAT_REPR = lambda o: format(o, '.3f')
 # In[2]:
 
 # set up file names and pathes
-dataDir='.'
+dataDir='/data/lisatmp3/yaoli/datasets/coco/coco/'
 dataType='val2014'
 algName = 'fakecap'
 annFile='%s/annotations/captions_%s.json'%(dataDir,dataType)
@@ -43,10 +43,10 @@ cocoEval = COCOEvalCap(coco, cocoRes)
 # cocoEval.params['image_id'] = cocoRes.getImgIds()
 # please remove this line when evaluating the full validation set
 cocoEval.params['image_id'] = cocoRes.getImgIds()
-
 # evaluate results
+t0 = time.time()
 cocoEval.evaluate()
-
+print 'evaluation took %.2f sec'%(time.time()-t0)
 
 # In[5]:
 

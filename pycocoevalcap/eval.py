@@ -48,6 +48,11 @@ class COCOEvalCap:
         eval = {}
         for scorer, method in scorers:
             print 'computing %s score...'%(scorer.method())
+            # test
+            #gts = {1: ['a metallic refrigerator freezer sitting inside of a kitchen', 'a small kitchen with a stove and refrigerator', "a stainless steel refrigerator in a home 's kitchen", 'a kitchen with a stove and a refrigerator', 'a kitchen has a fridge a stove and a counter top']}
+            #res = {1: ['a kitchen with a stove and a refrigerator']}
+            #gts = {1: ['a kitchen with a stove and a refrigerator', 'a kitchen with a stove and a refrigerator']}
+            import ipdb; ipdb.set_trace()
             score, scores = scorer.compute_score(gts, res)
             if type(method) == list:
                 for sc, scs, m in zip(score, scores, method):

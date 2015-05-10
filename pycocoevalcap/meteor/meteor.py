@@ -3,25 +3,27 @@
 # Python wrapper for METEOR implementation, by Xinlei Chen
 # Acknowledge Michael Denkowski for the generous discussion and help 
 
-import os
+import os, time
 import sys
 import subprocess
 import threading
 
 # Assumes meteor-1.5.jar is in the same directory as meteor.py.  Change as needed.
 METEOR_JAR = 'meteor-1.5.jar'
+#METEOR_JAR = '/u/chokyun/work/meteor-1.5/meteor-1.5.jar'
 # print METEOR_JAR
 
 class Meteor:
 
     def __init__(self):
-        self.meteor_cmd = ['java', '-jar', '-Xmx2G', METEOR_JAR, \
-                '-', '-', '-stdio', '-l', 'en', '-norm']
+        self.meteor_cmd = ['java', '-Xmx2G', '-jar', METEOR_JAR, \
+                '-', '-', '-l', 'en', '-norm', '-stdio']
         self.meteor_p = subprocess.Popen(self.meteor_cmd, \
                 cwd=os.path.dirname(os.path.abspath(__file__)), \
                 stdin=subprocess.PIPE, \
                 stdout=subprocess.PIPE, \
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE,
+                )
         # Used to guarantee thread safety
         self.lock = threading.Lock()
 
@@ -31,18 +33,20 @@ class Meteor:
         scores = []
 
         eval_line = 'EVAL'
+        score_lines = []
         self.lock.acquire()
         for i in imgIds:
             assert(len(res[i]) == 1)
-            stat = self._stat(res[i][0], gts[i])
+            score_line, stat = self._stat(res[i][0], gts[i])
+            score_lines.append(score_line)
             eval_line += ' ||| {}'.format(stat)
-
         self.meteor_p.stdin.write('{}\n'.format(eval_line))
+        time.sleep(1)
         for i in range(0,len(imgIds)):
             scores.append(float(self.meteor_p.stdout.readline().strip()))
         score = float(self.meteor_p.stdout.readline().strip())
         self.lock.release()
-
+        self.meteor_p.kill()
         return score, scores
 
     def method(self):
@@ -53,7 +57,7 @@ class Meteor:
         hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
         self.meteor_p.stdin.write('{}\n'.format(score_line))
-        return self.meteor_p.stdout.readline().strip()
+        return score_line, self.meteor_p.stdout.readline().strip()
 
     def _score(self, hypothesis_str, reference_list):
         self.lock.acquire()

@@ -101,12 +101,27 @@ class COCO:
         print 'index created!'
 
         # create class members
+        '''
+        self.anns[524282] = {u'image_id': 214124, u'id': 524282, u'caption': u'A closeup of some kind of food '}
+        '''
         self.anns = anns
+        '''
+        self.imgToAnns[262054] = [{u'image_id': 262054, u'id': 221005, u'caption': u'A large kitchen filled with white appliances with lots of counter space.'}, {u'image_id': 262054, u'id': 232702, u'caption': u'Dish towels hang from a stove handle in a kitchen with wooden cabinets.'}, {u'image_id': 262054, u'id': 233560, u'caption': u'A kitchen with a stove, a microwave above it and a window.'}, {u'image_id': 262054, u'id': 235696, u'caption': u'A clean kitchen is shown with three towels hanging on the cabinet.'}, {u'image_id': 262054, u'id': 239356, u'caption': u'A large kitchen with a built-in stove, oven and microwave'}]
+        ''' 
         self.imgToAnns = imgToAnns
+        '''
+        []
+        '''
         self.catToImgs = catToImgs
+        '''
+        self.imgs[576085] = {u'license': 4, u'url': u'http://farm6.staticflickr.com/5469/6916138920_fba2f1424e_z.jpg', u'file_name': u'COCO_val2014_000000576085.jpg', u'height': 393, u'width': 640, u'date_captured': u'2013-11-20 01:19:43', u'id': 576085}
+        '''
         self.imgs = imgs
+        '''
+        []
+        '''
         self.cats = cats
-
+        
     def info(self):
         """
         Print information about the annotation file.

@@ -26,13 +26,13 @@ class Bleu:
         bleu_scorer = BleuScorer(n=self._n)
         for id in imgIds:
             hypo = res[id]
-            ref = gts[id]
+            ref = gts[id] # contain 5 caps
 
             # Sanity check.
             assert(type(hypo) is list)
             assert(len(hypo) == 1)
             assert(type(ref) is list)
-            assert(len(ref) > 1)
+            assert(len(ref) >= 1)
 
             bleu_scorer += (hypo[0], ref)
 
